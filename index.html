@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For Panda ❤️</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+  text-align: center;
+  color: #333;
+}
+
+.hidden { display: none !important; }
+
+.container { padding: 60px 20px; }
+
+.card {
+  background: rgba(255,255,255,0.3);
+  backdrop-filter: blur(20px);
+  border-radius: 25px;
+  padding: 30px;
+  max-width: 800px;
+  margin: auto;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+}
+
+h1 { font-size: 1.8rem; }
+
+button {
+  padding: 12px 25px;
+  margin: 10px;
+  border: none;
+  border-radius: 30px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+#yesBtn { background: #ff4d6d; color: white; }
+#yesBtn:hover { transform: scale(1.1); }
+
+#dhattBtn { background: #333; color: white; }
+
+#storyBtn {
+  background: white;
+  color: #ff4d6d;
+  border: 2px solid #ff4d6d;
+}
+
+#storyBtn:hover {
+  background: #ff4d6d;
+  color: white;
+}
+
+video {
+  margin-top: 20px;
+  width: 100%;
+  max-width: 450px;
+  border-radius: 20px;
+  box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+}
+
+/* Modal */
+
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.95);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  color: white;
+  z-index: 999;
+  padding: 20px;
+}
+
+.modal img {
+  width: 100%;
+  max-width: 400px;
+  max-height: 60vh;
+  object-fit: contain;
+  border-radius: 20px;
+  transition: opacity 0.4s ease;
+}
+
+.modal p {
+  margin-top: 20px;
+  font-size: 1rem;
+  max-width: 500px;
+}
+
+.counter {
+  margin-top: 10px;
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
+.nav { margin-top: 15px; }
+
+.nav button {
+  background: white;
+  color: black;
+  font-weight: bold;
+  padding: 8px 15px;
+}
+
+.closeBtn {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  font-size: 1.6rem;
+  cursor: pointer;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+  <div class="card">
+
+    <h1 id="question">Will you be my Valentine, Panda? ❤️</h1>
+
+    <button id="yesBtn" onclick="sayYes()">YES 💖</button>
+    <button id="dhattBtn" onclick="sayDhatt()">Dhatt 😤</button>
+
+    <div id="afterYes" class="hidden">
+
+      <video id="valentineVideo" controls preload="none" class="hidden">
+        <source src="video.mp4" type="video/mp4">
+      </video>
+
+      <br>
+      <button id="storyBtn" onclick="openStory()">Our Moments 🤍</button>
+
+    </div>
+
+  </div>
+</div>
+
+<div id="storyModal" class="modal hidden">
+  <span class="closeBtn" onclick="closeStory()">✕</span>
+
+  <img id="storyImage" src="">
+  <p id="storyText"></p>
+  <div class="counter" id="counter"></div>
+
+  <div class="nav">
+    <button onclick="prev()">←</button>
+    <button onclick="next()">→</button>
+  </div>
+</div>
+
+<audio id="bgMusic" src="music.mp3" loop></audio>
+
+<script>
+
+const memories = [
+
+{ img: "img1.jpg", text: "The first picture of you I ever received. Didn’t know then you’d become this important to me. 🤍" },
+{ img: "img2.jpg", text: "Our first date. You were on your period and I still made you walk too much…" },
+{ img: "img3.jpg", text: "That small gift from you. Tiny thing. Huge meaning. 🎁" },
+{ img: "img4.jpg", text: "Second date. You waited an hour for me." },
+{ img: "img5.jpg", text: "Your handmade rose… and ice cream after. That day felt soft. 🌹🍦" },
+{ img: "img6.jpg", text: "Flowers for my pretty girl. 🌸" },
+{ img: "img7.jpg", text: "‘Ruko, aage aur bhi hai.’ Sneaky cameraman." },
+{ img: "img8.jpg", text: "Games. Yehhhh. Competitive mode: fully activated. 🎮" },
+{ img: "img9.jpg", text: "Panda Protocol. Top secret memories. 🐼" },
+{ img: "img10.jpg", text: "My pretty little baby." },
+{ img: "img11.jpg", text: "It’s still in my wallet.🤍" },
+{ img: "img12.jpg", text: "Shopping day… and that ramp walk. Main character energy." },
+{ img: "img13.jpg", text: "Those letters… and those kissable lips.Damn. 💋" },
+{ img: "img14.jpg", text: "The first time we kissed." },
+{ img: "img15.jpg", text: "‘What’s that babe? Is that love bites?’ 😌" },
+{ img: "img16.jpg", text: "That saree. You looked breathtaking." },
+{ img: "img17.jpg", text: "Kisses worth remembering ✨" },
+{ img: "img18.jpg", text: "Last Supper before surgery" },
+{ img: "img19.jpg", text: "Looking gorgeous babe" },
+{ img: "img20.jpg", text: "That moment I felt something shift 😈" },
+{ img: "img21.jpg", text: "‘Mein tumko itna marungi na.’ And still smiling while saying it." },
+{ img: "img22.jpg", text: "Your TED Talk and that orgasm 🎤." },
+{ img: "img23.jpg", text: "My favorite dish right in front of me. Lucky me" },
+{ img: "img24.jpg", text: "Matching outfits,Soups,racing through traffic hand in hand... spicy hotel plan 🍜." },
+{ img: "img25.jpg", text: "My angry bird scolding me. Fierce… but cute. 🐦" },
+{ img: "img26.jpg", text: "ASMR,moon,and moments" },
+{ img: "img27.jpg", text: "Cakeee and then my favourite cake" },
+{ img: "img28.jpg", text: "Wow my princess" }
+
+];
+
+let current = 0;
+let slideInterval = null;
+let touchStartX = 0;
+let touchEndX = 0;
+
+const music = document.getElementById("bgMusic");
+const video = document.getElementById("valentineVideo");
+
+function sayYes() {
+  document.getElementById("question").innerText = "I knew it, Panda ❤️";
+  document.getElementById("afterYes").classList.remove("hidden");
+  video.classList.remove("hidden");
+  video.play();
+}
+
+function sayDhatt() {
+  document.getElementById("question").innerText =
+    "Dhatt? That’s illegal. I already picked you.";
+}
+
+function openStory() {
+  video.pause();
+  video.currentTime = 0;
+  video.muted = true;
+
+  document.getElementById("storyModal").classList.remove("hidden");
+
+  showMemory();
+
+  music.volume = 0.5;
+  music.play().catch(()=>{});
+
+  startSlideshow();
+}
+
+function closeStory() {
+  document.getElementById("storyModal").classList.add("hidden");
+  music.pause();
+  stopSlideshow();
+}
+
+function showMemory() {
+  const img = document.getElementById("storyImage");
+  const text = document.getElementById("storyText");
+  const counter = document.getElementById("counter");
+
+  const newImage = new Image();
+  newImage.src = memories[current].img;
+
+  newImage.onload = function() {
+    img.style.opacity = 0;
+    setTimeout(() => {
+      img.src = newImage.src;
+      text.innerText = memories[current].text;
+      counter.innerText = (current + 1) + " / " + memories.length;
+      img.style.opacity = 1;
+    }, 200);
+  };
+}
+
+function next() {
+  current = (current + 1) % memories.length;
+  showMemory();
+}
+
+function prev() {
+  current = (current - 1 + memories.length) % memories.length;
+  showMemory();
+}
+
+function startSlideshow() {
+  stopSlideshow();
+  slideInterval = setInterval(() => {
+    current = (current + 1) % memories.length;
+    showMemory();
+  }, 5000); // 5 seconds
+}
+
+function stopSlideshow() {
+  if (slideInterval) {
+    clearInterval(slideInterval);
+    slideInterval = null;
+  }
+}
+
+const modal = document.getElementById("storyModal");
+
+modal.addEventListener("touchstart", e => {
+  touchStartX = e.changedTouches[0].screenX;
+});
+
+modal.addEventListener("touchend", e => {
+  touchEndX = e.changedTouches[0].screenX;
+  if (touchStartX - touchEndX > 50) next();
+  if (touchEndX - touchStartX > 50) prev();
+});
+
+</script>
+
+</body>
+</html>
